@@ -28,7 +28,7 @@ gendata <- function( obs, logite, logitd, pmiss ) {
 anadata <- function( dataframe, rep) {
   
   # Method 1: full data before data deletion  
-  fit.fd<-glm(D~E+Ctrue, family=binomial(link="logit"), data=dataframe, singular.ok=F)
+  fit.fd<-glm(D~E+Ctrue, family=binomial(link="logit"), data=dataframe, singular.ok=F, epsilon = 1e-14)
   res<-data.frame(
     rep <- rep,
     method <- "Full",
@@ -39,7 +39,7 @@ anadata <- function( dataframe, rep) {
   row.names = NULL)
   
   # Method 2: CCA 
-  fit.cca<-glm(D~E+Cobs, family=binomial(link="logit"), data=dataframe, singular.ok=F)
+  fit.cca<-glm(D~E+Cobs, family=binomial(link="logit"), data=dataframe, singular.ok=F, epsilon = 1e-14)
   res<-rbind(res,c(
    rep,
     "CCA",
@@ -54,7 +54,7 @@ anadata <- function( dataframe, rep) {
   df.mice<-dataframe[,c("Cobs", "D", "E")]
   df.mice$int<-df.mice$D*df.mice$E
   imp <- mice(df.mice, method = "norm", m = 5, printFlag = F)
-  fit <- with(data = imp, exp = glm(D~E+Cobs, family=binomial(link="logit"), singular.ok=F))
+  fit <- with(data = imp, exp = glm(D~E+Cobs, family=binomial(link="logit"), singular.ok=F, epsilon = 1e-14))
   rub.rul<-summary(pool(fit))
   res<-rbind(res,c(
     rep,

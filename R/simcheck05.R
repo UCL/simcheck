@@ -25,12 +25,12 @@ gendata <- function( obs, logite, logitd, pmiss ) {
 
 # Next we provide a function to analyse partially observed data.set anticipating possible failures:
 
-anadata <- function( dataframe, rep) {
+anadata <- function( dataframe, rep, print.output=F) {
   
   # Method 1: full data before data deletion  
-  fit.fd<-try(glm(D~E+Ctrue, family=binomial(link="logit"), data=dataframe, singular.ok=F))
-  # singular.ok=F is recommended in simulations: it stops R from dropping a variable for multicollinearity
-  if (class(fit.fd)[1]!= "try-error") {
+  fit.fd<-try(glm(D~E+Ctrue, family=binomial(link="logit"), data=dataframe, singular.ok=F, epsilon = 1e-14))
+  if (print.output) print(summary(fit.fd)) # To print output when checking on few iterations
+  if (!inherits(fit.fd, "try-error")) {
     res<-data.frame(
       rep <- rep,
       method <- "Full",
@@ -52,8 +52,9 @@ anadata <- function( dataframe, rep) {
   }
   
   # Method 2: CCA 
-  fit.cca<-try(glm(D~E+Cobs, family=binomial(link="logit"), data=dataframe, singular.ok=F))
-  if (class(fit.cca)[1]!= "try-error") {
+  fit.cca<-try(glm(D~E+Cobs, family=binomial(link="logit"), data=dataframe, singular.ok=F, epsilon = 1e-14))
+  if (print.output) print(summary(fit.cca)) # To print output when checking on few iterations
+  if (!inherits(fit.cca, "try-error")) {
     res<-rbind(res,c(
       rep,
       "CCA",
@@ -80,10 +81,11 @@ anadata <- function( dataframe, rep) {
   df.mice<-dataframe[,c("Cobs", "D", "E")]
   df.mice$int<-df.mice$D*df.mice$E
   imp <- try(mice(df.mice, method = "norm", m = 5, printFlag = F))
-  if (class(imp)[1] != "try-error") {
-    fit <- with(data = imp, exp = glm(D~E+Cobs, family=binomial(link="logit"), singular.ok=F))
-    if (class(fit)[1] != "try-error") {
+  if (!inherits(imp, "try-error")) {
+    fit <- with(data = imp, exp = glm(D~E+Cobs, family=binomial(link="logit"), singular.ok=F, epsilon = 1e-14))
+    if (!inherits(fit, "try-error")) {
       rub.rul<-summary(pool(fit))
+      if (print.output) print(rub.rul) # To print output when checking on few iterations
       res<-rbind(res,c(
         rep,
         "MI",

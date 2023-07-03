@@ -16,7 +16,7 @@ set.seed(576819506)
 # run 3 repetitions
 results <- foreach( i = 1:3) %do% {    # Note that in order to save the seed we return results as a list
   dataframe <- gendata( obs = 500, logite = "-1+Ctrue", logitd = "-1+Ctrue", pmiss = 0.3)
-  resul<-anadata(dataframe, i)
+  resul<-anadata(dataframe, i, print.output = T) # Printing output to double check we are storing correct estimates
   attr(resul, "seed")<-.Random.seed  # Now store the seed after running the sim study, in case you want to continue from here later
   resul
 }

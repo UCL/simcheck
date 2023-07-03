@@ -20,8 +20,8 @@ set.seed(576819506)
 anadata <- function( dataframe, rep) {
   
   # Method 1: full data before data deletion  
-  fit.fd<-try(logistf(D~E+Ctrue, data=dataframe, singular.ok=F))
-  if (class(fit.fd)[1]!= "try-error") {
+  fit.fd<-try(logistf(D~E+Ctrue, data=dataframe, singular.ok=F, epsilon = 1e-14))
+  if (!inherits(fit.fd, "try-error")) {
     res<-data.frame(
       rep <- rep,
       method <- "Full",
@@ -43,8 +43,8 @@ anadata <- function( dataframe, rep) {
   }
   
   # Method 2: CCA 
-  fit.cca<-try(logistf(D~E+Cobs, data=dataframe, singular.ok=F))
-  if (class(fit.cca)[1]!= "try-error") {
+  fit.cca<-try(logistf(D~E+Cobs, data=dataframe, singular.ok=F, epsilon = 1e-14))
+  if (!inherits(fit.cca, "try-error")) {
     res<-rbind(res,c(
       rep,
       "CCA",
@@ -71,9 +71,9 @@ anadata <- function( dataframe, rep) {
   df.mice<-dataframe[,c("Cobs", "D", "E")]
   df.mice$int<-df.mice$D*df.mice$E
   imp <- try(mice(df.mice, method = "norm", m = 5, printFlag = F))
-  if (class(imp)[1] != "try-error") {
-    fit <- with(data = imp, exp = logistf(D~E+Cobs, singular.ok=F))
-    if (class(fit)[1] != "try-error") {
+  if (!inherits(imp, "try-error")) {
+    fit <- with(data = imp, exp = logistf(D~E+Cobs, singular.ok=F, epsilon = 1e-14))
+    if (!inherits(fit, "try-error")) {
       coefs<-c(
         fit$analyses[[1]]$coefficients["ETRUE"],
         fit$analyses[[2]]$coefficients["ETRUE"],

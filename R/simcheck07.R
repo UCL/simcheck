@@ -19,7 +19,7 @@ results <- foreach( i = 1:120) %do% {    # Note that in order to save the seed w
   dataframe <- gendata( obs = 200, logite = "-4+Ctrue", logitd = "-4+Ctrue", pmiss = 0.3)
   resul<-anadata(dataframe, i)
   attr(resul, "seed")<-.Random.seed  # Now store the seed after running the sim study, in case you want to continue from here later
-  cat(".")
+  cat(".")  # To create progress bar. This can also be done with utils::txtProgressBar()` 
   if (i%%50==0) cat("\n")
   resul
 }
@@ -46,7 +46,3 @@ summary(fit.ad)
 
 # Save results
 save(results, results.df, file="simcheck07_results.RData")
-
-# and export results to Stata
-library(foreign)
-write.dta(results.df, "simcheck07_Rresults.dta")

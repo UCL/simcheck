@@ -6,11 +6,16 @@
 # Load relevant libraries, source simcheck05.R and load simcheck08_results.RData
 library(boot) # Contains inv.logit function
 library(mice) # for MI
+library(ggplot2)
+
 source("simcheck05.R")
 load("simcheck07_results.RData")
 
 # Find where very large se occurs
 large.ses<-unique(results.df[results.df$se>100,"rep"])
+
+# Re-level so that Full is reference:
+results.df$method<-factor(results.df$method, levels=c("Full", "CCA", "MI"))
 
 # Scatterplot of SE against estimate
 ggplot(results.df,aes(x=est,y=se)) + 

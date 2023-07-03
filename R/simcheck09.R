@@ -8,6 +8,7 @@ library(boot) # Contains inv.logit function
 library(mice) # for MI
 library(foreach) # for using foreach loop
 library(dplyr) # To transform list fo data frame in single data frame
+source("simcheck05.R")
 
 load("simcheck07_results.RData")
 
@@ -23,7 +24,7 @@ dataframe <- gendata( obs = 200, logite = "-4+Ctrue", logitd = "-4+Ctrue", pmiss
 
 # and explore it
 addmargins(table(dataframe[!is.na(dataframe$Cobs),"D"],dataframe[!is.na(dataframe$Cobs),"E"])) 
-fit.ad <- glm(D~E+Cobs, data=dataframe, family=binomial(link="logit"), singular.ok=F)
+fit.ad <- glm(D~E+Cobs, data=dataframe, family=binomial(link="logit"), singular.ok=F, epsilon = 1e-14)
 summary(fit.ad)
 
 
