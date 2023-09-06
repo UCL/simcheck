@@ -46,3 +46,7 @@ summary(fit.ad)
 
 # Save results
 save(results, results.df, file="simcheck07_results.RData")
+
+# Export results for Stata
+library(foreign) # read/write data to different formats
+write.dta(results.df, "simcheck07_Rresults.dta") # to Stata format

@@ -28,7 +28,7 @@ gendata <- function( obs, logite, logitd, pmiss ) {
 anadata <- function( dataframe, rep, print.output=F) {
   
   # Method 1: full data before data deletion  
-  fit.fd<-try(glm(D~E+Ctrue, family=binomial(link="logit"), data=dataframe, singular.ok=F, epsilon = 1e-14))
+  fit.fd<-try(glm(D~E+Ctrue, family=binomial(link="logit"), data=dataframe, singular.ok=F))
   if (print.output) print(summary(fit.fd)) # To print output when checking on few iterations
   if (!inherits(fit.fd, "try-error")) {
     res<-data.frame(
@@ -52,7 +52,7 @@ anadata <- function( dataframe, rep, print.output=F) {
   }
   
   # Method 2: CCA 
-  fit.cca<-try(glm(D~E+Cobs, family=binomial(link="logit"), data=dataframe, singular.ok=F, epsilon = 1e-14))
+  fit.cca<-try(glm(D~E+Cobs, family=binomial(link="logit"), data=dataframe, singular.ok=F))
   if (print.output) print(summary(fit.cca)) # To print output when checking on few iterations
   if (!inherits(fit.cca, "try-error")) {
     res<-rbind(res,c(
@@ -82,7 +82,7 @@ anadata <- function( dataframe, rep, print.output=F) {
   df.mice$int<-df.mice$D*df.mice$E
   imp <- try(mice(df.mice, method = "norm", m = 5, printFlag = F))
   if (!inherits(imp, "try-error")) {
-    fit <- with(data = imp, exp = glm(D~E+Cobs, family=binomial(link="logit"), singular.ok=F, epsilon = 1e-14))
+    fit <- with(data = imp, exp = glm(D~E+Cobs, family=binomial(link="logit"), singular.ok=F))
     if (!inherits(fit, "try-error")) {
       rub.rul<-summary(pool(fit))
       if (print.output) print(rub.rul) # To print output when checking on few iterations

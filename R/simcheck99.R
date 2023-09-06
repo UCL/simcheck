@@ -74,5 +74,11 @@ results.df[,6]<-as.numeric(results.df[,6])
 summary(results.df)
 
 colnames(results.df)[which(colnames(results.df)=="est")]<-"logOR"
+
+# correct one outlier to missing
+results.df[results.df$se>10,]
+results.df$logOR[results.df$se>10] <- NA
+results.df$se[results.df$se>10] <- NA
+
 s <- simsum(data = results.df, estvarname = "logOR", true = 0, se = "se", methodvar = "method", ref = "CCA", by="dgm")
 summary(s)
