@@ -4,6 +4,7 @@ Illustrative zip plots for point 13
 IW 18/4/2023 & 4/5/2023
 Revised 18/8/2023 taking advantage of siman zipplot v1.8.5
 Run in same folder as simcheck99_postfile.dta
+Revised 31/8/2023 to make high quality graphic
 */
 
 prog drop _all
@@ -38,5 +39,5 @@ siman zipplot, bygr(row(1) note("")) ///
 	xlabel(,labsize(large)) ylabel(,labsize(large)) ///
 	legend(size(large)) subtitle(,size(huge)) ///
 	xsize(9) ysize(5) subtitle(,just(center)) name(zipplot, replace)
-graph export Figure3.jpg, replace
+graph export Figure3.jpg, width(3600) replace
 
