@@ -6,5 +6,9 @@ Authors: Ian R White, Tra My Pham, Matteo Quartagno, Tim P Morris
 
 MRC Clinical Trials Unit at UCL
 
-This article is available as a preprint at https://osf.io/cbr72/
-and is under review by the International Journal of Epidemiology.
+This article was first available as a preprint <a href="https://osf.io/cbr72/">(link)</a>
+and has now been published by the International Journal of Epidemiology
+<a href ="https://academic.oup.com/ije/advance-article/doi/10.1093/ije/dyad134/7313663">(link)</a>.
+
+The files here are the same as those provided in the supplementary materials on the IJE web site, 
+but the file names here are the same as the file names in the article.
